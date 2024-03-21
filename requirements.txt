@@ -1,0 +1,19 @@
+
+#Model packages
+
+scikit-surprise==1.1.3 #This package has a few package dependencies it will also install 
+
+#Common  packages included in scikit-surprise: installed numpy-1.21.5 pandas-1.4.2 scipy-1.7.3
+
+# Application Packages
+flask == 3.0.2 
+
+#Database Package 
+pymongo == 4.6.2
+
+
+# Stream packages
+kafka-python
+
+#testing
+mongomock == 4.1.2
