@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/adamk/Desktop/Projects_MLinProd/Gitlab_MLFlow/movie-recommendations/mlruns/190189832847598621/b4d17ddc4d19472a8c71d6df8e386b29/artifacts
+end_time: 1711119301926
+entry_point_name: ''
+experiment_id: '190189832847598621'
+lifecycle_stage: active
+run_id: b4d17ddc4d19472a8c71d6df8e386b29
+run_name: Candidate 4
+run_uuid: b4d17ddc4d19472a8c71d6df8e386b29
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1711119301856
+status: 3
+tags: []
+user_id: adamk
