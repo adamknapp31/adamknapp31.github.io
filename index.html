@@ -79,22 +79,21 @@
     <h2 id="gitlab-ml-ops">GitLab ML Ops</h2>
     <p>MLOps, a compound of machine learning and operations, aims to unify ML system development and ML system deployment. 
         The goal of MLOPs is to shorten the lifecycle of deploying machine learning models and provide continuous feedback between models 
-        and development to ensure models are valuable and efficient. GitLab naturally facilitates MLOps through integrated CI/CD 
-        pipelines, enabling automated model testing, deployment, and monitoring, but they saw an opportunity to close the gap between 
-        data scientist and software developers...</p>
-    <br>
+        and development to ensure models are valuable and efficient. GitLab naturally facilitates MLOps with its DevOps toolchain (ie. CI/CD 
+        automated testing, monitoring, ect.) but they saw the need to include some MLOps specific tools to reduce the gap between data scientist 
+        and software developers.</p>
 
-    <!-- Inserting the MLOps image -->
+    <figure>
     <img src="MLOps.webp" alt="Overview of MLOps" style="max-width:100%; height:auto;">
-    <br>
+    <figcaption>Visual representation of MLOps integration in GitLab.</figcaption>
+    </figure>
     
 
-    <p>This automation is not only crucial for the rapid iteration 
-        of ML projects but also ensures models are up-to-date and perform as expected in production environments. 
-        Furthermore, GitLab's issue tracking and project management tools allow for seamless integration of MLOps tasks 
-        with the broader objectives of the development project, ensuring that ML models evolve in alignment with software 
-        development and business needs.Because of GitLab's value proposistion to be a central platform for development, they 
-        have started BETA testing MLOps tools which integrate with GitLab's interface.</p>
+    <p>One major hurdle for MLOps is the messiness of model/data exploration. ML developers typically use jupyter notebooks and don't structure the notebook in a standardized way
+        making each notebook hard for colaberation inside and outside of the ML team. To combat this phenomina, Model registry tools like MLflow, W&B, ect. were made to help track 
+        model production and help facilitate the effective sharing of models. These tools allow developers to log aspects of their models to ensure reproducability for organization</p>
+    
+
 
     <h2 id="gitlab-experiments">GitLab Experiments</h2>
 
