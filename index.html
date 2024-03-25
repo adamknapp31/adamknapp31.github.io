@@ -62,6 +62,7 @@
             <a href="#gitlab-experiments">GitLab Experiments</a>
             <ul>
                 <li><a href="#gitlab-experiments-overview">Overview</a></li>
+                <li><a href="#gitlab-experiments-setup">Setup</a></li>
                 <li><a href="#gitlab-experiments-example">Example</a></li>
             </ul>
         </li>
@@ -107,26 +108,23 @@
 
     <h3 id="gitlab-experiments-overview">Overview</h3>
 
-    <p>Experimentation is at the heart of machine learning. With GitLab experiments, ML developers can log their models 
+    <p>Experimentation is at the heart of machine learning. With <a href="https://docs.gitlab.com/ee/user/project/ml/experiment_tracking/#machine-learning-model-experiments">GitLab experiments</a>,   
+        ML developers can log their models 
         in GitLab with the information needed to share their findings and make the model run reproducable.It is commonly perceived 
-    that the following items are needed to be tracked with a model to make it reproducable:</p>
+    that the Code, Data, and Enviornment are needed to be tracked with a model to make it reproducable. We'll highlight these aspects
+    in our example</p>
         
-    <ul>
-        <li>Code</li>
-        <li>Data</li>
-        <li>Environment</li>
-    </ul>
 
     <p>GitLab experiments does not force you to log your model in a way to ensure it is reporducable, but in my example below 
         I will highlight a basic way to. Understand that every team is different and you will need to cator how you use experiments 
         to your team.  
     </p>
 
-    
+    <h3 id="gitlab-experiments-setup">Setup</h3>
 
-    <h3 id="gitlab-experiments-example">Example</h3>
-    <p>This feature is still in Beta testing and has very limited documentaion so I will provide a step by step tutorial on 
-        how to implement. 
+    <p>This feature is still in Beta testing and has very limited documentaion. I will provide a step by step tutorial on 
+        how to implement so that you don't have the same issues I did. To complete this you should already have a GitLab account
+        with at least one project.
     </p>
     
 
@@ -136,7 +134,7 @@
         <li>Project Tokens 
             <figure>
                 <img src="Images/AccessTokens.png" alt="Tokens" style="max-width:100%; height:auto;">
-                <figcaption>Navigate to 'SETTINGS' -> 'ACCESS TOKENS'</figcaption>
+                <figcaption>In your project, Navigate to 'SETTINGS' -> 'ACCESS TOKENS'</figcaption>
                 </figure>
         </li>
         <li>Add Token 
@@ -154,10 +152,29 @@
         <li>Save Token 
             <figure>
                 <img src="Images/SaveProjectToken.png" alt="Screen shot on: Where to save token" style="max-width:100%; height:auto;">
-                <figcaption>Name you token, Set exporation date, Select 'DEVELOPER' role (Experiments needs minimum of Developer role), Check "API" for Access Scope (Required Scope)</figcaption>
+                <figcaption>Copy and save this token for later use</figcaption>
                 </figure> 
         </li>
     </ul>
+
+    <h4>Configuration</h4>
+
+    <ul>
+        <li></li>
+        <li>Set environment variables of MLFlow to Gitlab
+            <div class="code-block">
+                <pre><code>
+                    os.environ["MLFLOW_TRACKING_TOKEN"]='<your token>'
+                    os.environ["MLFLOW_TRACKING_URI"]='http://<your gitlab instance>/api/v4/projects/<your project id>/ml/mlflow'</code></pre>
+            </div>
+        
+        </li>
+    </ul>
+
+
+
+    <h3 id="gitlab-experiments-example">Example</h3>
+    
 
 
 
