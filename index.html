@@ -84,24 +84,83 @@
         and software developers.</p>
 
     <figure>
-    <img src="MLOps.webp" alt="Overview of MLOps" style="max-width:100%; height:auto;">
+    <img src="Images/MLOps.webp" alt="Overview of MLOps" style="max-width:100%; height:auto;">
     <figcaption>Visual representation of MLOps integration in GitLab.</figcaption>
     </figure>
     
 
     <p>One major hurdle for MLOps is the messiness of model/data exploration. ML developers typically use jupyter notebooks and don't structure the notebook in a standardized way
-        making each notebook hard for colaberation inside and outside of the ML team. To combat this phenomina, Model registry tools like MLflow, W&B, ect. were made to help track 
-        model production and help facilitate the effective sharing of models. These tools allow developers to log aspects of their models to ensure reproducability for organization</p>
+        making each notebook hard for colaberation. To combat this phenomina, Model registry tools like MLflow, W&B, ect. were made to help track 
+        model production and help facilitate the effective sharing of models. These tools allow developers to log aspects of their models to ensure reproducability for organization
+     </p>
     
+     <p> GitLab added the benifits of a model registry by incorperating MLFlow into their interface. First, the MFflow client 
+    which would normally be hosted on a seperate server is hosted on the GitLab endpoint allowing all team members visibility into 
+    ML model production. Second, GitLab nests it's experiements with 
+    ML Flows allowing ML developers to log and store information about significant model's trained to assist in sharing within the team. Third,
+    GitLab included a Model Registry section to version models for deployment. The model registry can take a model experiment and 
+    move it into a condolidated location where Operators have a the latest production ready models available with their artifiacts.
+    Finally using exisiting GitLab DEV tools, the deployment of models can be automated into new or existing pipelines</p>
 
 
     <h2 id="gitlab-experiments">GitLab Experiments</h2>
 
     <h3 id="gitlab-experiments-overview">Overview</h3>
 
-    <p>Experimentation is at the heart of machine learning. GitLab supports this through integrated tracking and management of experiments, facilitating the systematic exploration of model architectures, hyperparameters, and data processing techniques. By leveraging GitLab's CI/CD pipelines for ML workflows, teams can automate the execution of experiments, record results, and ensure reproducibility. This capability is enhanced by GitLab's support for Docker containers, which can encapsulate experiment environments to ensure consistency across different stages of development and deployment. Additionally, GitLab's Artifacts and Environments features allow for the storage of experiment outputs and the easy rollback to previous versions of models, making experiment management more straightforward and efficient.</p>
+    <p>Experimentation is at the heart of machine learning. With GitLab experiments, ML developers can log their models 
+        in GitLab with the information needed to share their findings and make the model run reproducable.It is commonly perceived 
+    that the following items are needed to be tracked with a model to make it reproducable:</p>
+        
+    <ul>
+        <li>Code</li>
+        <li>Data</li>
+        <li>Environment</li>
+    </ul>
+
+    <p>GitLab experiments does not force you to log your model in a way to ensure it is reporducable, but in my example below 
+        I will highlight a basic way to. Understand that every team is different and you will need to cator how you use experiments 
+        to your team.  
+    </p>
+
+    
 
     <h3 id="gitlab-experiments-example">Example</h3>
+    <p>This feature is still in Beta testing and has very limited documentaion so I will provide a step by step tutorial on 
+        how to implement. 
+    </p>
+    
+
+    <h4>Set Up GitLab API Key</h4>
+
+    <ul>
+        <li>Project Tokens 
+            <figure>
+                <img src="Images/AccessTokens.png" alt="Tokens" style="max-width:100%; height:auto;">
+                <figcaption>Navigate to 'SETTINGS' -> 'ACCESS TOKENS'</figcaption>
+                </figure>
+        </li>
+        <li>Add Token 
+            <figure>
+                <img src="Images/AddNewToken.png" alt="Screen shot on: How to add a new token" style="max-width:100%; height:auto;">
+                <figcaption>Navigate to 'ADD NEW TOKEN'</figcaption>
+                </figure>
+        </li>
+        <li>Token Configuration
+            <figure>
+                <img src="Images/AddaProjectToken.png" alt="Screen shot on: How to configure a project Token" style="max-width:100%; height:auto;">
+                <figcaption>Name you token, Set exporation date, Select 'DEVELOPER' role (Experiments needs minimum of Developer role), Check "API" for Access Scope (Required Scope)</figcaption>
+                </figure> 
+        </li>
+        <li>Save Token 
+            <figure>
+                <img src="Images/SaveProjectToken.png" alt="Screen shot on: Where to save token" style="max-width:100%; height:auto;">
+                <figcaption>Name you token, Set exporation date, Select 'DEVELOPER' role (Experiments needs minimum of Developer role), Check "API" for Access Scope (Required Scope)</figcaption>
+                </figure> 
+        </li>
+    </ul>
+
+
+
 
     <h3>How to Format Code</h3>
     <p>Displaying code within your blog can be a challenge, but it's essential for technical topics. Here's how you can add a code snippet:</p>
