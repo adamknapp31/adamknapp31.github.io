@@ -58,7 +58,7 @@ test_x = test.drop(["quality"], axis=1)
 train_y = train[["quality"]]
 test_y = test[["quality"]]
 
-mlflow.set_experiment(experiment_name=f"Demo 7")
+mlflow.set_experiment(experiment_name=f"Demo 9")
 
 alphas = [.1, .2, .3]
 l1_ratios = [0.1, 0.2, 0.3]
@@ -80,7 +80,8 @@ for index, [alpha, l1_ratio] in enumerate(combinations):
         print("  R2: %s" % r2)
 
         #mlflow.log_param("alpha", alpha / 10.0)
-        #mlflow.log_param("l1_ratio", l1_ratio)
+        mlflow.log_param("l1_ratio", l1_ratio)
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("r2", r2)
         mlflow.log_metric("mae", mae)
+        mlflow.log_artifact("requirements.txt")
