@@ -56,29 +56,37 @@
     <h2>Outline</h2>
     <p>Here's a quick overview of what is covered:</p>
     <ul>
-        <li>GitLab Background</li>
-        <li>GitLab ML OPs</li>
-        <li>GitLab Experiments Overview</li>
-        <li>GitLab Experiments Example</li>
+        <li><a href="#gitlab-background">GitLab Background</a></li>
+        <li><a href="#gitlab-ml-ops">GitLab ML Ops</a></li>
+        <li>
+            <a href="#gitlab-experiments">GitLab Experiments</a>
+            <ul>
+                <li><a href="#gitlab-experiments-overview">GitLab Experiments Overview</a></li>
+                <li><a href="#gitlab-experiments-example">GitLab Experiments Example</a></li>
+            </ul>
+        </li>
     </ul>
 
-    <h2>GitLab Background</h2>
-    <p>GitLab, founded in 2014, quickly emerged as a frontrunner in the DevOps toolchain, offering a single application for
-        the entire software development lifecycle that can be hosting outside of GitLab servers. From project planning and source code 
-        management to CI/CD, monitoring, and security, GitLab has provided comprehensive solutions that streamline productivity and foster a collaborative 
-        environment for software development teams. Its ability to support both the development and operations side of projects makes it particularly
-        appealing for managing machine learning (ML) projects, which inherently require cross-disciplinary collaboration between software
-        engineers and data scientists.</p>
+    <h2 id="gitlab-background">GitLab Background</h2>
+    <p><a href="https://about.gitlab.com/">GitLab</a>, founded in 2014, quickly emerged as a frontrunner in the DevOps 
+        toolchain, offering a single application for the entire software development lifecycle. From project planning and 
+        source code management to CI/CD, monitoring, and security, GitLab has provided comprehensive solutions that 
+        streamline productivity and foster a collaborative environment for software development teams. Its ability to 
+        support both the development and operations side of projects makes it particularly appealing for managing machine 
+        learning (ML) projects, which inherently require cross-disciplinary collaboration between software engineers and 
+        data scientists.</p>
 
-    <h2>GitLab ML Ops</h2>
+    <h2 id="gitlab-ml-ops">GitLab ML Ops</h2>
     <p>MLOps, a compound of machine learning and operations, aims to unify ML system development and ML system deployment. 
-        The goal is to shorten the lifecycle of deploying machine learning models and provide continuous feedback between models 
+        The goal of MLOPs is to shorten the lifecycle of deploying machine learning models and provide continuous feedback between models 
         and development to ensure models are valuable and efficient. GitLab naturally facilitates MLOps through integrated CI/CD 
         pipelines, enabling automated model testing, deployment, and monitoring, but they saw an opportunity to close the gap between 
-        data scientist and software developers.</p>
-        
+        data scientist and software developers...</p>
+    <br>
+
     <!-- Inserting the MLOps image -->
     <img src="MLOps.webp" alt="Overview of MLOps" style="max-width:100%; height:auto;">
+    <br>
     
 
     <p>This automation is not only crucial for the rapid iteration 
@@ -88,9 +96,13 @@
         development and business needs.Because of GitLab's value proposistion to be a central platform for development, they 
         have started BETA testing MLOps tools which integrate with GitLab's interface.</p>
 
-    <h2>GitLab Experiments Overview</h2>
+    <h2 id="gitlab-experiments">GitLab Experiments</h2>
+
+    <h3 id="gitlab-experiments-overview">Overview</h3>
+
     <p>Experimentation is at the heart of machine learning. GitLab supports this through integrated tracking and management of experiments, facilitating the systematic exploration of model architectures, hyperparameters, and data processing techniques. By leveraging GitLab's CI/CD pipelines for ML workflows, teams can automate the execution of experiments, record results, and ensure reproducibility. This capability is enhanced by GitLab's support for Docker containers, which can encapsulate experiment environments to ensure consistency across different stages of development and deployment. Additionally, GitLab's Artifacts and Environments features allow for the storage of experiment outputs and the easy rollback to previous versions of models, making experiment management more straightforward and efficient.</p>
 
+    <h3 id="gitlab-experiments-example">Example</h3>
 
     <h3>How to Format Code</h3>
     <p>Displaying code within your blog can be a challenge, but it's essential for technical topics. Here's how you can add a code snippet:</p>
