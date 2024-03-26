@@ -195,7 +195,7 @@
             <div class="code-block">
                 <pre><code>
                 #Example usage
-                
+
                 import mlflow
 
                 #Set the experiment name
@@ -212,6 +212,9 @@
 
                 #Log an artifiact to be saved with the run
                 mlflow.log_artifact('file location')
+
+                #end the logging 
+                mlflow.end_run()
                 
                 </code></pre>
             </div>
@@ -221,23 +224,152 @@
 
 
 
-    <h3 id="gitlab-experiments-example">Example</h3>
-    
+    <h3 id="gitlab-experiments-example">Movie Recommendations Example</h3>
 
+    <p>In this example we'll explore model experiments being used in a movie recommendation model
+    </p>
 
-
-
-    <h3>How to Format Code</h3>
-    <p>Displaying code within your blog can be a challenge, but it's essential for technical topics. Here's how you can add a code snippet:</p>
     <div class="code-block">
-        <pre><code>// Example JavaScript function
-function sayHello() {
-    console.log("Hello, world!");
-}</code></pre>
+        <pre><code>
+            #imports
+            import os
+            import sys
+            import json
+            import subprocess
+            import mlflow
+            from surprise import Dataset, Reader, SVD, accuracy
+            from surprise.model_selection import train_test_split, GridSearchCV
+            import pickle
+</div>
+
+    <div class="code-block">
+        <pre><code>
+            #import data
+            data_path = os.path.join("..", "..", "data", "kafka_log_(2024-02-11T16_2024-02-11T16).csv")
+            
+            xx, user_rating_data_df, xxx = utilities.process_csv(data_path)
+        
+            os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
+            os.environ["MLFLOW_TRACKING_URI"]='https://gitlab.com/api/v4/projects/56020467/ml/mlflow'</code></pre>
+        </div>
+
+    <div class="code-block">
+        <pre><code>
+            os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
+            os.environ["MLFLOW_TRACKING_URI"]='http://[your gitlab instance]/api/v4/projects/[your project id]/ml/mlflow'</code></pre>
     </div>
 
-    <p>The above example shows a simple JavaScript function. Notice how we use the <code>pre</code> and <code>code</code> tags for proper formatting.</p>
-</div>
+    <div class="code-block">
+        <pre><code>
+            
+        def train_and_evaluate_model(user_rating_data_df):
+            reader = Reader(rating_scale=(1, 5))
+            data = Dataset.load_from_df(user_rating_data_df[['UserID', 'Title', 'Rating']], reader)
+
+            param_grid = {
+                'n_factors': [50, 100, 150],
+                'n_epochs': [20, 30],
+                'lr_all': [0.005, 0.010],
+                'reg_all': [0.02, 0.05]
+            }
+
+            gs = GridSearchCV(SVD, param_grid, measures=['rmse', 'mae'], cv=3, n_jobs=-1)
+            gs.fit(data)
+
+            best_model_params = gs.best_params['rmse']
+            print(f"Best model parameters: {best_model_params}")
+
+            # Splitting the dataset into training and testing sets
+            trainset, testset = train_test_split(data, test_size=0.25)
+
+            # Initialize the best model with the best parameters
+            best_model = SVD(**best_model_params)
+
+            # Directly fit the best model to the training set
+            best_model.fit(trainset)
+
+            # Test the best model on the test set
+            predictions = best_model.test(testset)
+
+            # Calculate and print the performance metrics
+            rmse = accuracy.rmse(predictions, verbose=True)
+            mae = accuracy.mae(predictions, verbose=True)
+
+            print(f"Test Set RMSE: {rmse}")
+            print(f"Test Set MAE: {mae}")
+
+
+            ### Log best model ###
+
+            #Set up the experiment and the run in that experiment
+            mlflow.set_experiment(experiment_name=f'SVD_v0') #named based on the type of model
+            mlflow.start_run(run_name=f"Candidate {2}")
+
+            # Log the best hyperparameters
+            for param, value in best_model_params.items():
+                mlflow.log_param(f"best_{param}", value)
+
+            # Log performance of model 
+            mlflow.log_metric(f"RMSE", rmse)
+            mlflow.log_metric(f"MAE", mae)
+
+            # Log dataset path 
+            csv_file_path = "data/kafka_log_(2024-02-11T16_2024-02-11T16).csv"
+            mlflow.log_param("dataset_path", csv_file_path)
+
+            # Log Python version
+            mlflow.log_param("python_version", sys.version)
+
+            # Log requirements.txt and make a requirements.txt if not there
+            requirements_file = "requirements.txt"
+            if not os.path.exists(requirements_file):
+                print("requirements.txt not found, generating...")
+                requirements = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze']).decode('utf-8')
+                with open(requirements_file, "w") as f:
+                    f.write(requirements)
+            mlflow.log_artifact(requirements_file)
+
+            # Serialize and log the best model
+            model_filename = "best_SVD_model.pkl"
+            with open(model_filename, "wb") as f:
+                pickle.dump(best_model, f)
+            mlflow.log_artifact(model_filename)
+
+            #end the logging 
+            mlflow.end_run()
+
+            return best_model
+
+        train_and_evaluate_model(user_rating_data_df)   
+        </div>
+
+        <p> After running the above code the SVD experiment will populate in Gitlab</p>
+
+        <figure>
+            <img src="Images/ModelExperiment.png" style="max-width:100%; height:auto;">
+            <figcaption>Navigate to Model Experiments by Selecting ANALYIS -> EXPERIMENTS</figcaption>
+            </figure>
+
+        <figure>
+            <img src="Images/Experiments.png" style="max-width:100%; height:auto;">
+            <figcaption>Select Experiment you would like to explore</figcaption>
+            </figure>
+    
+
+        <figure>
+            <img src="Images/Run1.png"  style="max-width:100%; height:auto;">
+            </figure>
+
+            <figure>
+                <img src="Images/Run2.png" style="max-width:100%; height:auto;">
+                </figure>
+            <figure>
+                <img src="Images/Artifacts.png" style="max-width:100%; height:auto;">
+                <figcaption>After selecting ARTIFACTS, all logged files can be found and downloaded</figcaption>
+                </figure>
+
+            
+ 
 
 </body>
 </html>
