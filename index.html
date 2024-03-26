@@ -160,12 +160,60 @@
     <h4>Configuration</h4>
 
     <ul>
-        <li></li>
-        <li>Set environment variables of MLFlow to Gitlab
+        <li>Obtain Project ID
+            <ul>
+                <li>General Settings
+                    <figure>
+                        <img src="Images/GeneralSettings.png" alt="Screen shot on: How to Navigate to general settings" style="max-width:100%; height:auto;">
+                        <figcaption>From a project, navigate to SETTINGS -> GENERAL</figcaption>
+                        </figure> 
+                </li>
+                <li>Project ID
+                    <figure>
+                        <img src="Images/ProjectID.png" alt="Screen shot on: Project ID" style="max-width:100%; height:auto;">
+                        <figcaption>Copy and save your project ID for later use</figcaption>
+                        </figure> 
+                </li>
+        </ul></li>
+        <li>Install ML Flow 
             <div class="code-block">
                 <pre><code>
-                    os.environ["MLFLOW_TRACKING_TOKEN"]='<your token>'
-                    os.environ["MLFLOW_TRACKING_URI"]='http://<your gitlab instance>/api/v4/projects/<your project id>/ml/mlflow'</code></pre>
+                    pip install mlflow == 2.11.2 
+                </div>
+        </li>
+        <li>Set endpoint of MLFlow to Gitlab
+            <div class="code-block">
+                <pre><code>
+                    os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
+                    os.environ["MLFLOW_TRACKING_URI"]='http://[your gitlab instance]/api/v4/projects/[your project id]/ml/mlflow'</code></pre>
+            </div>
+            Note: your gitlab instance relates to the first part of the url. Ex. for "https://gitlab.com/group-name/project-name" 
+            the gitlab instance is "gitlab.com" 
+        
+        </li>
+        <li>Use ML Flow library to log experiments in .py or .ipynb files
+            <div class="code-block">
+                <pre><code>
+                #Example usage
+                
+                import mlflow
+
+                #Set the experiment name
+                mlflow.set_experiment(experiment_name=f"Experiment")  
+
+                #Set the run in the experiment name
+                mlflow.start_run(run_name=f"Run")
+                
+                #Log model parameters for model
+                mlflow.log_param("model parameter", 0)
+
+                #Log metric for model
+                mlflow.log_metric("Model Metric", 0)
+
+                #Log an artifiact to be saved with the run
+                mlflow.log_artifact('file location')
+                
+                </code></pre>
             </div>
         
         </li>
