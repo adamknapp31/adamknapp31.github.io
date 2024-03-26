@@ -66,6 +66,7 @@
                 <li><a href="#gitlab-experiments-example">Example</a></li>
             </ul>
         </li>
+        <li><a href="#conclusion">Conclusion</a></li>
     </ul>
 
     <h2 id="gitlab-background">GitLab Background</h2>
@@ -85,22 +86,22 @@
         and software developers.</p>
 
     <figure>
-    <img src="Images/MLOps.webp" alt="Overview of MLOps" style="max-width:100%; height:auto;">
-    <figcaption>Visual representation of MLOps integration in GitLab.</figcaption>
+    <img src="Images/mlops-cycle.png" alt="Overview of MLOps" style="max-width:100%; height:auto;">
+    <figcaption>Visual representation of a MLOps Diagram (https://polyaxon.com/)</figcaption>
     </figure>
     
 
-    <p>One major hurdle for MLOps is the messiness of model/data exploration. ML developers typically use jupyter notebooks and don't structure the notebook in a standardized way
+    <p>One major hurdle for MLOps is the messiness of model exploration. ML developers typically use jupyter notebooks and don't structure the notebook in a standardized way
         making each notebook hard for colaberation. To combat this phenomina, Model registry tools like MLflow, W&B, ect. were made to help track 
         model production and help facilitate the effective sharing of models. These tools allow developers to log aspects of their models to ensure reproducability for organization
      </p>
     
      <p> GitLab added the benifits of a model registry by incorperating MLFlow into their interface. First, the MFflow client 
     which would normally be hosted on a seperate server is hosted on the GitLab endpoint allowing all team members visibility into 
-    ML model production. Second, GitLab nests it's experiements with 
+    ML model production without the overhead of running a seperate endpoint. Second, GitLab nests it's experiements with 
     ML Flows allowing ML developers to log and store information about significant model's trained to assist in sharing within the team. Third,
-    GitLab included a Model Registry section to version models for deployment. The model registry can take a model experiment and 
-    move it into a condolidated location where Operators have a the latest production ready models available with their artifiacts.
+    GitLab included a Model Registry section which powers versioning models for deployment. The model registry can take a model experiment and 
+    move it into a condolidated location where operators have a the latest production ready models available with their artifiacts.
     Finally using exisiting GitLab DEV tools, the deployment of models can be automated into new or existing pipelines</p>
 
 
@@ -116,7 +117,7 @@
         
 
     <p>GitLab experiments does not force you to log your model in a way to ensure it is reporducable, but in my example below 
-        I will highlight a basic way to. Understand that every team is different and you will need to cator how you use experiments 
+        I will highlight some basic logs. Understand that every team is different and you will need to cator how you use experiments 
         to your team.  
     </p>
 
@@ -187,8 +188,8 @@
                     os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
                     os.environ["MLFLOW_TRACKING_URI"]='http://[your gitlab instance]/api/v4/projects/[your project id]/ml/mlflow'</code></pre>
             </div>
-            Note: your gitlab instance relates to the first part of the url. Ex. for "https://gitlab.com/group-name/project-name" 
-            the gitlab instance is "gitlab.com" 
+            <p>Note: your gitlab instance relates to the first part of the url. Ex. for "https://gitlab.com/group-name/project-name" 
+            the gitlab instance is "gitlab.com"</p>
         
         </li>
         <li>Use ML Flow library to log experiments in .py or .ipynb files
@@ -343,7 +344,9 @@
         train_and_evaluate_model(user_rating_data_df)   
         </div>
 
-        <p> After running the above code the SVD experiment will populate in Gitlab</p>
+        <p> After running the above code the SVD experiment will populate in Gitlab. The following screenshots highlight 
+            viewing a logged model in Gitlab Experiments.
+        </p>
 
         <figure>
             <img src="Images/ModelExperiment.png" style="max-width:100%; height:auto;">
@@ -368,7 +371,13 @@
                 <figcaption>After selecting ARTIFACTS, all logged files can be found and downloaded</figcaption>
                 </figure>
 
-            
+    <h3 id="conclusion">Conclusion</h3>       
+
+    <p>MLOps, a compound of machine learning and operations, aims to unify ML system development and ML system deployment. 
+        The goal of MLOPs is to shorten the lifecycle of deploying machine learning models and provide continuous feedback between models 
+        and development to ensure models are valuable and efficient. GitLab naturally facilitates MLOps with its DevOps toolchain (ie. CI/CD 
+        automated testing, monitoring, ect.) but they saw the need to include some MLOps specific tools to reduce the gap between data scientist 
+        and software developers.</p>
  
 
 </body>
