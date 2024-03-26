@@ -78,186 +78,147 @@
         learning (ML) projects, which inherently require cross-disciplinary collaboration between software engineers and 
         data scientists.</p>
 
-    <h2 id="gitlab-ml-ops">GitLab ML Ops</h2>
-    <p>MLOps, a compound of machine learning and operations, aims to unify ML system development and ML system deployment. 
-        The goal of MLOPs is to shorten the lifecycle of deploying machine learning models and provide continuous feedback between models 
-        and development to ensure models are valuable and efficient. GitLab naturally facilitates MLOps with its DevOps toolchain (ie. CI/CD 
-        automated testing, monitoring, ect.) but they saw the need to include some MLOps specific tools to reduce the gap between data scientist 
-        and software developers.</p>
-
+    <h2 id="gitlab-ml-ops">GitLab MLOps</h2>
+    <p>MLOps, merging machine learning with operations, seeks to unify ML system development and deployment. The aim is to expedite the lifecycle of deploying machine learning models and ensure continuous improvement through feedback loops between model performance and development efforts. GitLab, with its robust DevOps toolchain including CI/CD, automated testing, and monitoring, has embraced MLOps, introducing specific tools to bridge the gap between data scientists and software developers.</p>
+    
     <figure>
     <img src="Images/mlops-cycle.png" alt="Overview of MLOps" style="max-width:100%; height:auto;">
-    <figcaption>Visual representation of a MLOps Diagram (https://polyaxon.com/)</figcaption>
+    <figcaption>Visual representation of an MLOps Diagram (<a href="https://polyaxon.com/">https://polyaxon.com/</a>)</figcaption>
     </figure>
     
-
-    <p>One major hurdle for MLOps is the messiness of model exploration. ML developers typically use jupyter notebooks and don't structure the notebook in a standardized way
-        making each notebook hard for colaberation. To combat this phenomina, Model registry tools like MLflow, W&B, ect. were made to help track 
-        model production and help facilitate the effective sharing of models. These tools allow developers to log aspects of their models to ensure reproducability for organization
-     </p>
+    <p>Model exploration, often hindered by non-standardized Jupyter notebooks, poses a significant challenge to collaboration. To address this, tools like MLflow and W&B were developed, enabling tracking of model evolution and facilitating model sharing to ensure organizational reproducibility.</p>
     
-     <p> GitLab added the benifits of a model registry by incorperating MLFlow into their interface. First, the MFflow client 
-    which would normally be hosted on a seperate server is hosted on the GitLab endpoint allowing all team members visibility into 
-    ML model production without the overhead of running a seperate endpoint. Second, GitLab nests it's experiements with 
-    ML Flows allowing ML developers to log and store information about significant model's trained to assist in sharing within the team. Third,
-    GitLab included a Model Registry section which powers versioning models for deployment. The model registry can take a model experiment and 
-    move it into a condolidated location where operators have a the latest production ready models available with their artifiacts.
-    Finally using exisiting GitLab DEV tools, the deployment of models can be automated into new or existing pipelines</p>
+    <p>GitLab's integration of MLflow through its Experiments and Model Registry features exemplifies its commitment to enhancing the MLOps workflow. The MLflow client, typically external, is hosted within GitLab, granting all team members direct access to ML model production without additional infrastructure. GitLab Experiments leverage MLflow for detailed logging and information storage about significant models, aiding internal sharing. Furthermore, the Model Registry supports model versioning for deployment, allowing the consolidation of experiments into a single, deployment-ready location. Leveraging GitLab's DevOps tools, model deployment can seamlessly integrate into existing pipelines, streamlining the process.</p>
+    
+    <p>While Experiments and Model Registry serve similar purposes, this blog will primarily focus on the Experiments feature, highlighting its role in facilitating efficient, collaborative MLOps practices within GitLab.</p>
+
 
 
     <h2 id="gitlab-experiments">GitLab Experiments</h2>
 
     <h3 id="gitlab-experiments-overview">Overview</h3>
-
-    <p>Experimentation is at the heart of machine learning. With <a href="https://docs.gitlab.com/ee/user/project/ml/experiment_tracking/#machine-learning-model-experiments">GitLab experiments</a>,   
-        ML developers can log their models 
-        in GitLab with the information needed to share their findings and make the model run reproducable.It is commonly perceived 
-    that the Code, Data, and Enviornment are needed to be tracked with a model to make it reproducable. We'll highlight these aspects
-    in our example</p>
-        
-
-    <p>GitLab experiments does not force you to log your model in a way to ensure it is reporducable, but in my example below 
-        I will highlight some basic logs. Understand that every team is different and you will need to cator how you use experiments 
-        to your team.  
-    </p>
-
-    <h3 id="gitlab-experiments-setup">Setup</h3>
-
-    <p>This feature is still in Beta testing and has very limited documentaion. I will provide a step by step tutorial on 
-        how to implement so that you don't have the same issues I did. To complete this you should already have a GitLab account
-        with at least one project.
-    </p>
     
-
+    <p>Experimentation is at the heart of machine learning. With <a href="https://docs.gitlab.com/ee/user/project/ml/experiment_tracking/#machine-learning-model-experiments">GitLab experiments</a>, ML developers can log their models in GitLab with the information needed to share their findings and make the model run reproducible. It is commonly perceived that Code, Data, and Environment are needed to be tracked with a model to make it reproducible. We'll highlight these aspects in our example.</p>
+            
+    <p>GitLab experiments do not force you to log your model in a way to ensure it is reproducible, but in my example below, I will highlight some basic logs. Understand that every team is different and you will need to tailor how you use experiments to your team.</p>
+    
+    <h3 id="gitlab-experiments-setup">Setup</h3>
+    
+    <p>This feature is still in Beta testing and has very limited documentation. I will provide a step-by-step tutorial on how to implement so that you don't encounter the same issues I did. To complete this, you should already have a GitLab account with at least one project.</p>
+        
     <h4>Set Up GitLab API Key</h4>
-
+    
     <ul>
         <li>Project Tokens 
             <figure>
                 <img src="Images/AccessTokens.png" alt="Tokens" style="max-width:100%; height:auto;">
-                <figcaption>In your project, Navigate to 'SETTINGS' -> 'ACCESS TOKENS'</figcaption>
-                </figure>
+                <figcaption>In your project, navigate to 'SETTINGS' -> 'ACCESS TOKENS'.</figcaption>
+            </figure>
         </li>
         <li>Add Token 
             <figure>
-                <img src="Images/AddNewToken.png" alt="Screen shot on: How to add a new token" style="max-width:100%; height:auto;">
-                <figcaption>Navigate to 'ADD NEW TOKEN'</figcaption>
-                </figure>
+                <img src="Images/AddNewToken.png" alt="Screen shot on how to add a new token" style="max-width:100%; height:auto;">
+                <figcaption>Navigate to 'ADD NEW TOKEN'.</figcaption>
+            </figure>
         </li>
         <li>Token Configuration
             <figure>
-                <img src="Images/AddaProjectToken.png" alt="Screen shot on: How to configure a project Token" style="max-width:100%; height:auto;">
-                <figcaption>Name you token, Set exporation date, Select 'DEVELOPER' role (Experiments needs minimum of Developer role), Check "API" for Access Scope (Required Scope)</figcaption>
-                </figure> 
+                <img src="Images/AddaProjectToken.png" alt="Screen shot on how to configure a project Token" style="max-width:100%; height:auto;">
+                <figcaption>Name your token, set an expiration date, select 'DEVELOPER' role (Experiments need a minimum of Developer role), and check "API" for Access Scope (Required Scope).</figcaption>
+            </figure> 
         </li>
         <li>Save Token 
             <figure>
-                <img src="Images/SaveProjectToken.png" alt="Screen shot on: Where to save token" style="max-width:100%; height:auto;">
-                <figcaption>Copy and save this token for later use</figcaption>
-                </figure> 
+                <img src="Images/SaveProjectToken.png" alt="Screen shot on where to save token" style="max-width:100%; height:auto;">
+                <figcaption>Copy and save this token for later use.</figcaption>
+            </figure> 
         </li>
     </ul>
-
+    
     <h4>Configuration</h4>
-
+    
     <ul>
         <li>Obtain Project ID
             <ul>
                 <li>General Settings
                     <figure>
-                        <img src="Images/GeneralSettings.png" alt="Screen shot on: How to Navigate to general settings" style="max-width:100%; height:auto;">
-                        <figcaption>From a project, navigate to SETTINGS -> GENERAL</figcaption>
-                        </figure> 
+                        <img src="Images/GeneralSettings.png" alt="Screen shot on how to navigate to general settings" style="max-width:100%; height:auto;">
+                        <figcaption>From a project, navigate to SETTINGS -> GENERAL.</figcaption>
+                    </figure> 
                 </li>
                 <li>Project ID
                     <figure>
-                        <img src="Images/ProjectID.png" alt="Screen shot on: Project ID" style="max-width:100%; height:auto;">
-                        <figcaption>Copy and save your project ID for later use</figcaption>
-                        </figure> 
+                        <img src="Images/ProjectID.png" alt="Screen shot on Project ID" style="max-width:100%; height:auto;">
+                        <figcaption>Copy and save your project ID for later use.</figcaption>
+                    </figure> 
                 </li>
-        </ul></li>
-        <li>Install ML Flow 
-            <div class="code-block">
-                <pre><code>
-                    pip install mlflow == 2.11.2 
-                </div>
+            </ul>
         </li>
-        <li>Set endpoint of MLFlow to Gitlab
+        <li>Install MLFlow 
             <div class="code-block">
-                <pre><code>
-                    os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
-                    os.environ["MLFLOW_TRACKING_URI"]='http://[your gitlab instance]/api/v4/projects/[your project id]/ml/mlflow'</code></pre>
+                <pre><code>pip install mlflow==2.11.2</code></pre>
             </div>
-            <p>Note: your gitlab instance relates to the first part of the url. Ex. for "https://gitlab.com/group-name/project-name" 
-            the gitlab instance is "gitlab.com"</p>
-        
         </li>
-        <li>Use ML Flow library to log experiments in .py or .ipynb files
+        <li>Set the endpoint of MLFlow to GitLab
             <div class="code-block">
-                <pre><code>
-                #Example usage
-
-                import mlflow
-
-                #Set the experiment name
-                mlflow.set_experiment(experiment_name=f"Experiment")  
-
-                #Set the run in the experiment name
-                mlflow.start_run(run_name=f"Run")
-                
-                #Log model parameters for model
-                mlflow.log_param("model parameter", 0)
-
-                #Log metric for model
-                mlflow.log_metric("Model Metric", 0)
-
-                #Log an artifiact to be saved with the run
-                mlflow.log_artifact('file location')
-
-                #end the logging 
-                mlflow.end_run()
-                
+                <pre><code>os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
+    os.environ["MLFLOW_TRACKING_URI"]='http://[your gitlab instance]/api/v4/projects/[your project id]/ml/mlflow'</code></pre>
+            </div>
+            <p>Note: Your GitLab instance relates to the first part of the URL. Ex. for "https://gitlab.com/group-name/project-name" the GitLab instance is "gitlab.com".</p>
+        </li>
+        <li>Use the MLflow library to log experiments in .py or .ipynb files
+            <div class="code-block">
+                <pre><code># Example usage
+        
+        import mlflow
+        
+        # Set the experiment name
+        mlflow.set_experiment(experiment_name="Experiment")
+        
+        # Start the run within the experiment
+        mlflow.start_run(run_name="Run")
+        
+        # Log model parameters
+        mlflow.log_param("model parameter", "parameter_value")
+        
+        # Log metrics for the model
+        mlflow.log_metric("model_metric", 1.0)
+        
+        # Log an artifact to be saved with the run
+        mlflow.log_artifact("path/to/file")
+        
+        # End the logging
+        mlflow.end_run()
                 </code></pre>
             </div>
-        
         </li>
-    </ul>
+        
 
 
 
     <h3 id="gitlab-experiments-example">Movie Recommendations Example</h3>
 
-    <p>In this example we'll explore model experiments being used in a movie recommendation model
-    </p>
+    <p>In this example, we demonstrate the use of model experiments within a movie recommendation system. By incorporating GitLab Experiments into their notebooks, a multi-person team can efficiently capture progress and share insights with one another, enhancing collaboration and project management.</p>
 
     <div class="code-block">
         <pre><code>
-            #imports
-            import os
-            import sys
-            import json
-            import subprocess
-            import mlflow
-            from surprise import Dataset, Reader, SVD, accuracy
-            from surprise.model_selection import train_test_split, GridSearchCV
-            import pickle
-</div>
+    # Imports
+    import os
+    import sys
+    import subprocess
+    import mlflow
+    from surprise import Dataset, Reader, SVD, accuracy
+    from surprise.model_selection import train_test_split, GridSearchCV
+    import pickle
 
-    <div class="code-block">
-        <pre><code>
-            #import data
-            data_path = os.path.join("..", "..", "data", "kafka_log_(2024-02-11T16_2024-02-11T16).csv")
-            
-            xx, user_rating_data_df, xxx = utilities.process_csv(data_path)
-        
-            os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
-            os.environ["MLFLOW_TRACKING_URI"]='https://gitlab.com/api/v4/projects/56020467/ml/mlflow'</code></pre>
-        </div>
+    # Import data
+    data_path = os.path.join("..", "..", "data", "movie_ratings.csv")
+    user_rating_data_df = utilities.process_csv(data_path)
 
-    <div class="code-block">
-        <pre><code>
-            os.environ["MLFLOW_TRACKING_TOKEN"]='[Saved API Token]'
-            os.environ["MLFLOW_TRACKING_URI"]='http://[your gitlab instance]/api/v4/projects/[your project id]/ml/mlflow'</code></pre>
+    # Set MLflow tracking environment variables
+    os.environ["MLFLOW_TRACKING_TOKEN"] = '[Your Saved API Token]'
+    os.environ["MLFLOW_TRACKING_URI"] = 'https://gitlab.com/api/v4/projects/[Your Project ID]/ml/mlflow'
+        </code></pre>
     </div>
 
     <div class="code-block">
@@ -314,7 +275,7 @@
             mlflow.log_metric(f"RMSE", rmse)
             mlflow.log_metric(f"MAE", mae)
 
-            # Log dataset path 
+            # Log dataset path- this allows team members to reproduce the testing
             csv_file_path = "data/kafka_log_(2024-02-11T16_2024-02-11T16).csv"
             mlflow.log_param("dataset_path", csv_file_path)
 
@@ -344,9 +305,9 @@
         train_and_evaluate_model(user_rating_data_df)   
         </div>
 
-        <p> After running the above code the SVD experiment will populate in Gitlab. The following screenshots highlight 
-            viewing a logged model in Gitlab Experiments.
-        </p>
+        <p>After running the above code, the SVD experiment will be visible in GitLab. The following screenshots 
+            highlight how to view a logged model in GitLab Experiments:</p>
+
 
         <figure>
             <img src="Images/ModelExperiment.png" style="max-width:100%; height:auto;">
@@ -371,13 +332,17 @@
                 <figcaption>After selecting ARTIFACTS, all logged files can be found and downloaded</figcaption>
                 </figure>
 
-    <h3 id="conclusion">Conclusion</h3>       
+    <h2 id="conclusion">Conclusion</h2>
 
-    <p>MLOps, a compound of machine learning and operations, aims to unify ML system development and ML system deployment. 
-        The goal of MLOPs is to shorten the lifecycle of deploying machine learning models and provide continuous feedback between models 
-        and development to ensure models are valuable and efficient. GitLab naturally facilitates MLOps with its DevOps toolchain (ie. CI/CD 
-        automated testing, monitoring, ect.) but they saw the need to include some MLOps specific tools to reduce the gap between data scientist 
-        and software developers.</p>
+    <p>In conclusion, the exploration of GitLab's Experiments underscores the platform's continued
+         expansion into a comprehensive DevOps toolchain. The integration of MLflow into GitLab exemplifies 
+         their commitment to adopting successful design patterns favored by ML developers. However, this tight 
+         integration also makes GitLab susceptible to potential issues when new versions of MLflow are released. 
+         Despite these challenges, the future of GitLab Experiments, as it transitions from beta to a fully integrated
+          product within the MLOps pipeline, is eagerly anticipated. Watching how GitLab Experiments matures and 
+          enhances the machine learning workflow is an exciting prospect for developers and teams alike.</p>
+    
+
  
 
 </body>
